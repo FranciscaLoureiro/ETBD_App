@@ -1,8 +1,3 @@
-using ETBDApp.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using ETBD.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 

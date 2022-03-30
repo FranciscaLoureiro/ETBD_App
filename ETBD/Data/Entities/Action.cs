@@ -1,6 +1,6 @@
 ﻿namespace ETBD.Data.Entities;
 
-public class Category
+public class Action
 {
     public int Id { get; set; }
 
