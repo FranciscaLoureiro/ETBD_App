@@ -9,9 +9,10 @@ namespace ETBDApp.Data
     {
         
         public DbSet<Category> Category { get; set; }
+        //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         /*
         public DbSet<Entities.Action> Action { get; set; }
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        
         public DbSet<Profile> Profile { get; set; }
         public DbSet<Food> Food { get; set; }
         */
@@ -24,4 +25,6 @@ namespace ETBDApp.Data
             base.OnModelCreating(builder);
         }
     }
+
+  
 }
