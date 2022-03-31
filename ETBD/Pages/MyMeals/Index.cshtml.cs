@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ETBD.Data.Entities;
 using ETBDApp.Data;
 
-namespace ETBD.Pages.MyProfile
+namespace ETBD.Pages.MyMeals
 {
     public class IndexModel : PageModel
     {
@@ -19,12 +19,12 @@ namespace ETBD.Pages.MyProfile
             _context = context;
         }
 
-        public IList<Profile> Profile { get;set; }
+        public IList<Meal> Meal { get;set; }
 
         public async Task OnGetAsync()
         {
-            Profile = await _context.Profiles
-                .Include(p => p.User).ToListAsync();
+            Meal = await _context.Meals
+                .Include(m => m.User).ToListAsync();
         }
     }
 }

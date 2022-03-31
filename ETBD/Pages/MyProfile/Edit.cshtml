@@ -1,0 +1,70 @@
+﻿@page
+@model ETBD.Pages.MyProfile.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Profile</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Profile.Id" />
+            <div class="form-group">
+                <label asp-for="Profile.FirstName" class="control-label"></label>
+                <input asp-for="Profile.FirstName" class="form-control" />
+                <span asp-validation-for="Profile.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Profile.LastName" class="control-label"></label>
+                <input asp-for="Profile.LastName" class="form-control" />
+                <span asp-validation-for="Profile.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Profile.BirthDate" class="control-label"></label>
+                <input asp-for="Profile.BirthDate" class="form-control" />
+                <span asp-validation-for="Profile.BirthDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Profile.Age" class="control-label"></label>
+                <input asp-for="Profile.Age" class="form-control" />
+                <span asp-validation-for="Profile.Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Profile.Weight" class="control-label"></label>
+                <input asp-for="Profile.Weight" class="form-control" />
+                <span asp-validation-for="Profile.Weight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Profile.Height" class="control-label"></label>
+                <input asp-for="Profile.Height" class="form-control" />
+                <span asp-validation-for="Profile.Height" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Profile.BMI" class="control-label"></label>
+                <input asp-for="Profile.BMI" class="form-control" />
+                <span asp-validation-for="Profile.BMI" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Profile.UserId" class="control-label"></label>
+                <select asp-for="Profile.UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                <span asp-validation-for="Profile.UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

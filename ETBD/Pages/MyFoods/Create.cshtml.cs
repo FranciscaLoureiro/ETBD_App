@@ -12,6 +12,7 @@
         public IActionResult OnGet()
         {
             Categories = new SelectList(_context.Categories, "Id", "Name");
+            Actions = _context.Actions.ToList();
             return Page();
         }
 
@@ -22,6 +23,8 @@
 
         [BindProperty]
         public int SelectedCategoryId { get; set; }
+
+        public List<Action> Actions { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()

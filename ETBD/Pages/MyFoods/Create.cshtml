@@ -22,6 +22,18 @@
                     <option value="0">--Select Category--</option>
                 </select>
             </div>
+            @if(Model.Actions != null && Model.Actions.Count() > 0)
+            {
+                <div class="form-group">
+                    @foreach (var item in Model.Actions)
+                    {
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input"/>
+                            <label class="form-check-label">@item.Name</label>
+                        </div>
+                    }
+                </div>
+            }
             <br/>
             <div class="form-group">
                 <input type="submit" value="Add" class="btn btn-primary" />
