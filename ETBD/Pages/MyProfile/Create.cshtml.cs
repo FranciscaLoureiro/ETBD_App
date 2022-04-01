@@ -1,45 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using ETBD.Data.Entities;
-using ETBDApp.Data;
-
 namespace ETBD.Pages.MyProfile
 {
+    [BindProperties]
     public class CreateModel : PageModel
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        public Profile Profile { get; set; }
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CreateModel(ETBDApp.Data.ApplicationDbContext context)
+        public string UserId { get; set; }
+
+        public CreateModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
-
-        public IActionResult OnGet()
+        public void OnGet()
         {
-        ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return Page();
+            UserId = _userManager.GetUserId(User);
         }
 
-        [BindProperty]
-        public Profile Profile { get; set; }
-
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+
+            //if (ModelState.IsValid)
+            //{
+            decimal weight = Convert.ToDecimal(Profile.Weight);
+            decimal height = Convert.ToDecimal(Profile.Height);
+            DateTime birthDate = Convert.ToDateTime(Profile.BirthDate);
+
+            UserId = _userManager.GetUserId(User);
+            var ibm = Math.Round(weight / (height * height), 2);
+            var age = Math.Round((DateTime.Now - birthDate).TotalDays / 365);
+
+            Profile.UserId = UserId;
+            Profile.Age = Convert.ToInt32(age);
+            Profile.BMI = Convert.ToDecimal(ibm);
 
             _context.Profiles.Add(Profile);
             await _context.SaveChangesAsync();
+            return RedirectToPage("Index");
 
-            return RedirectToPage("./Index");
+            //}
+            //return Page();
         }
+
+
     }
 }

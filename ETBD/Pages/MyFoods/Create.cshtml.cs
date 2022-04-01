@@ -27,7 +27,7 @@
         public List<Action> Actions { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string[] ActionsList)
         {
             Food.Category = _context.Categories.Where(c => c.Id == SelectedCategoryId).FirstOrDefault();
             ModelState.Clear();
@@ -42,6 +42,25 @@
 
             _context.Foods.Add(Food);
             await _context.SaveChangesAsync();
+
+            foreach (var ActionId in ActionsList)
+            {
+                Action Action = _context.Actions.FirstOrDefault(a => a.Id == int.Parse(ActionId));
+                if (Action != null)
+                {
+                    ActionFood ActionFood = new ActionFood
+                    {
+                        Food = Food,
+                        Action = Action
+                    };
+
+                    TryValidateModel(ActionFood);
+
+                    _context.ActionFoods.Add(ActionFood);
+
+                    await _context.SaveChangesAsync();
+                }
+            }
 
             return RedirectToPage("./Index");
         }

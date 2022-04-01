@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace ETBD.Pages
+﻿namespace ETBD.Pages
 {
     public class IndexModel : PageModel
     {
@@ -12,9 +9,15 @@ namespace ETBD.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public ActionResult OnGet()
         {
 
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToPage("MyProfile/Index");
+            }
+
+            return Page();
         }
     }
 }

@@ -1,56 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ETBD.Data.Entities;
-using ETBDApp.Data;
-
 namespace ETBD.Pages.MyProfile
 {
+    [BindProperties]
     public class EditModel : PageModel
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        public Profile MyProfile { get; set; }
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public EditModel(ETBDApp.Data.ApplicationDbContext context)
+        public string UserId { get; set; }
+
+        public EditModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
-
-        [BindProperty]
-        public Profile Profile { get; set; }
-
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public IActionResult OnGet(int? id)
         {
-            if (id == null)
+            MyProfile = _context.Profiles.FirstOrDefault(m => m.Id == id);
+
+            if (MyProfile == null)
             {
                 return NotFound();
             }
 
-            Profile = await _context.Profiles
-                .Include(p => p.User).FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Profile == null)
-            {
-                return NotFound();
-            }
-           ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            //if (ModelState.IsValid)
+            //{
+            decimal weight = Convert.ToDecimal(MyProfile.Weight);
+            decimal height = Convert.ToDecimal(MyProfile.Height);
+            DateTime birthDate = Convert.ToDateTime(MyProfile.BirthDate);
 
-            _context.Attach(Profile).State = EntityState.Modified;
+            UserId = _userManager.GetUserId(User);
+            var ibm = Math.Round(weight / (height * height), 2);
+            var age = Math.Round((DateTime.Now - birthDate).TotalDays / 365);
+
+            MyProfile.UserId = UserId;
+            MyProfile.Age = Convert.ToInt32(age);
+            MyProfile.BMI = Convert.ToDecimal(ibm);
+
+            _context.Attach(MyProfile).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
             try
             {
@@ -58,22 +50,12 @@ namespace ETBD.Pages.MyProfile
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProfileExists(Profile.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
+            return RedirectToPage("Index");
 
-            return RedirectToPage("./Index");
-        }
-
-        private bool ProfileExists(int id)
-        {
-            return _context.Profiles.Any(e => e.Id == id);
+            //}
+            //return Page();
         }
     }
 }

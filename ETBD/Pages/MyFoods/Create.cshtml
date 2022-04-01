@@ -23,16 +23,23 @@
                 </select>
             </div>
             @if(Model.Actions != null && Model.Actions.Count() > 0)
-            {
-                <div class="form-group">
-                    @foreach (var item in Model.Actions)
+            {   
+                    @foreach (var Action in Model.Actions)
                     {
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input"/>
-                            <label class="form-check-label">@item.Name</label>
+                            <input 
+                                name="ActionsList"
+                                for="ActionsList" 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                value="@Action.Id"
+                                id="@Action.Id"
+                            />
+                            <label id="@Action.Id" for="ActionsList" class="form-check-label">@Action.Name</label>
+                            @Html.HiddenFor(x => @Action.Id)
+                            @Html.HiddenFor(y => @Action.Name)
                         </div>
                     }
-                </div>
             }
             <br/>
             <div class="form-group">

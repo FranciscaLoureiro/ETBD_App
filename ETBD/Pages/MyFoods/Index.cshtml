@@ -8,7 +8,7 @@
 <h1>Foods</h1>
 
 <p>
-    <a asp-page="Create">Add new food</a>
+    <a asp-page="Create" class="btn btn-success">Add new food</a>
 </p>
 <table class="table">
     <thead>
@@ -19,22 +19,36 @@
             <th>
                 @Html.DisplayNameFor(model => model.Food[0].Category)
             </th>
+            <th>
+                Actions
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Food) {
+
+@for(var i = 0; i < Model.Food.Count(); i++) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => Model.Food[i].Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
+                @Html.DisplayFor(modelItem => Model.Food[i].Category.Name)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <ul>
+                    @foreach (var action in Model.FoodActionsList[i].Actions)
+                    {
+                        <li>
+                            @action.Name
+                        </li>
+                    }
+                </ul>
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@Model.Food[i].Id" class="btn btn-info">Edit</a> 
+                <a asp-page="./Details" asp-route-id="@Model.Food[i].Id" class="btn btn-warning">Details</a> 
+                <a asp-page="./Delete" asp-route-id="@Model.Food[i].Id" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }

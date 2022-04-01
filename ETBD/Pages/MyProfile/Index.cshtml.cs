@@ -1,30 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using ETBD.Data.Entities;
-using ETBDApp.Data;
-
 namespace ETBD.Pages.MyProfile
 {
+    [BindProperties]
     public class IndexModel : PageModel
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _context;
+        public string UserId { get; set; }
+        public Profile MyProfile { get; set; }
 
-        public IndexModel(ETBDApp.Data.ApplicationDbContext context)
+        public IndexModel(UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
-        public IList<Profile> Profile { get;set; }
-
-        public async Task OnGetAsync()
+        public IActionResult OnGet()
         {
-            Profile = await _context.Profiles
-                .Include(p => p.User).ToListAsync();
+            UserId = _userManager.GetUserId(User);
+            MyProfile = _context.Profiles.FirstOrDefault(m => m.UserId == UserId);
+
+            if (MyProfile == null)
+            {
+                return RedirectToPage("Create");
+            }
+
+            return Page();
         }
     }
 }
