@@ -16,16 +16,16 @@
                 <input asp-for="Category.Name" class="form-control" />
                 <span asp-validation-for="Category.Name" class="text-danger"></span>
             </div>
-            <hr />
+            <br />
             <div class="form-group">
-                <input type="submit" value="Add" class="btn btn-primary" />
+                <input type="submit" value="Add" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
-    <a asp-page="Index">Back to all categories</a>
+    <a asp-page="Index" class="btn btn-secondary">Back</a>
 </div>
 
 @section Scripts {
