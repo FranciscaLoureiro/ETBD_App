@@ -3,10 +3,31 @@
 @{
 }
 
-<a asp-page="./Edit" asp-route-id="@Model.MyProfile.Id" class="btn btn-secondary">Edit</a>
-<h1>@Model.MyProfile.FirstName</h1>
-<h1>@Model.MyProfile.LastName</h1>
-<h1>@Model.MyProfile.Age</h1>
-<h1>@Model.MyProfile.Weight</h1>
-<h1>@Model.MyProfile.Height</h1>
-<h1>@Model.MyProfile.BMI</h1>
+<h1>Profile</h1>
+<hr/>
+<table class="table">
+ <tr>
+    <td><b>First Name</b></td>
+    <td><b>Last Name</b></td>
+    <td><b>Age</b></td>
+    <td><b>Weight</b></td>
+    <td><b>Height</b></td>
+    <td><b>BMI</b></td>
+  </tr>
+  <tr>
+    <td>@Model.MyProfile.FirstName</td>
+    <td>@Model.MyProfile.LastName</td>
+    <td>@Model.MyProfile.Age</td>
+    <td>@Model.MyProfile.Weight</td>
+    <td>@Model.MyProfile.Height</td>
+    <td>@Model.MyProfile.BMI</td>
+  </tr>
+</table>
+<br />
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.MyProfile.Id" class="btn btn-success">Edit</a>
+</div>
+<br />
+<div>
+    <a asp-page="./Index" class="btn btn-secondary">Back</a>
+</div>
