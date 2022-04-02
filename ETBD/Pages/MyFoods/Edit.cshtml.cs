@@ -11,6 +11,8 @@
 
         [BindProperty]
         public Food Food { get; set; }
+        public List<Action> Actions { get; set; }
+        public List<int> SelectedActionsIds { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -22,17 +24,24 @@
             Food = await _context.Foods
                 .Include(f => f.Category).FirstOrDefaultAsync(m => m.Id == id);
 
+            Actions = _context.Actions.ToList();
+
+            List<ActionFood> ActionFoodList = await _context.ActionFoods
+                    .Where(x => x.FoodId == Food.Id)
+                    .Include(x => x.Action)
+                    .ToListAsync();
+
+            SelectedActionsIds = ActionFoodList.Select(x => x.Action.Id).ToList();
+
             if (Food == null)
             {
                 return NotFound();
             }
-           ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string[] NewActionsList)
         {
             if (!ModelState.IsValid)
             {
@@ -54,6 +63,30 @@
                 else
                 {
                     throw;
+                }
+            }
+
+            // Delete
+            _context.ActionFoods.RemoveRange(_context.ActionFoods.Where(x => x.FoodId == Food.Id));
+            _context.SaveChanges();
+
+            // Add new rows
+            foreach (var ActionId in NewActionsList)
+            {
+                Action Action = _context.Actions.FirstOrDefault(a => a.Id == int.Parse(ActionId));
+                if (Action != null)
+                {
+                    ActionFood ActionFood = new ActionFood
+                    {
+                        Food = Food,
+                        Action = Action
+                    };
+
+                    TryValidateModel(ActionFood);
+
+                    _context.ActionFoods.Add(ActionFood);
+
+                    await _context.SaveChangesAsync();
                 }
             }
 

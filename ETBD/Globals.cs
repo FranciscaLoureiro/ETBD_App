@@ -26,3 +26,4 @@ global using Microsoft.Extensions.Logging;
 global using System.ComponentModel;
 global using Action = ETBD.Data.Entities.Action;
 global using ETBD.Services;
+global using System.ComponentModel.DataAnnotations.Schema;

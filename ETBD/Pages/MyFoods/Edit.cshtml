@@ -22,16 +22,36 @@
                 <select asp-for="Food.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="Food.CategoryId" class="text-danger"></span>
             </div>
+           @if(Model.Actions != null && Model.Actions.Count() > 0)
+            {   
+                    @foreach (var Action in Model.Actions)
+                    {
+                        <div class="form-check">
+                            <input 
+                                name="NewActionsList"
+                                for="NewActionsList" 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                value="@Action.Id"
+                                id="@Action.Id"
+                                @(Html.Raw(Model.SelectedActionsIds.Contains(Action.Id) ? "checked=\"checked\"": ""))
+                            />
+                            <label id="@Action.Id" for="NewActionsList" class="form-check-label">@Action.Name</label>
+                            @Html.HiddenFor(x => @Action.Id)
+                            @Html.HiddenFor(y => @Action.Name)
+                        </div>
+                    }
+            }
             <hr />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
-<hr />
+<br />
 <div>
-    <a asp-page="./Index">Back to all foods</a>
+    <a asp-page="./Index" class="btn btn-secondary">Back</a>
 </div>
 
 @section Scripts {

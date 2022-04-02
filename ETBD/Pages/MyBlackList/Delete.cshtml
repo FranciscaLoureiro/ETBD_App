@@ -1,33 +1,32 @@
 ﻿@page
-@model ETBD.Pages.MyFoods.DeleteModel
+@model ETBD.Pages.MyBlackList.DeleteModel
 
 @{
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete Food</h1>
+<h1>Delete</h1>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Food.Name)
+            @Html.DisplayNameFor(model => model.BlackList.Date)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Food.Name)
+            @Html.DisplayFor(model => model.BlackList.Date)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Food.Category)
+            @Html.DisplayNameFor(model => model.BlackList.Food)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Food.Category.Name)
+            @Html.DisplayFor(model => model.BlackList.Food.Name)
         </dd>
     </dl>
     
     <form method="post">
-        <input type="hidden" asp-for="Food.Id" />
-        <hr />
+        <input type="hidden" asp-for="BlackList.Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-page="./Index" class="btn btn-secondary">Back</a>
     </form>

@@ -23,8 +23,15 @@
             @Html.DisplayFor(model => model.Food.Category.Name)
         </dd>
     </dl>
+    <ul>
+        @foreach (var action in Model.ActionsList)
+        {
+            <li>@action.Name</li>
+        }
+    </ul>
 </div>
+ <hr />
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Food.Id">Edit</a> |
-    <a asp-page="./Index">Back to all foods</a>
+    <a asp-page="./Edit" class="btn btn-primary" asp-route-id="@Model.Food.Id">Edit</a> |
+    <a asp-page="./Index" class="btn btn-secondary">Back</a>
 </div>
