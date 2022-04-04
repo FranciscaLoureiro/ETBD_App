@@ -24,20 +24,51 @@
                 <input asp-for="Meal.Date" class="form-control" />
                 <span asp-validation-for="Meal.Date" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <label asp-for="Meal.UserId" class="control-label"></label>
-                <select asp-for="Meal.UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="Meal.UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-success" />
             </div>
         </form>
     </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Unit
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(var foodMeal in Model.FoodMeals)
+        {
+            <tr>
+                <td>
+                    @foodMeal.Food.Name
+                </td>
+                <td>
+                    @foodMeal.PortionQuantity
+                </td>
+                <td>
+                    @foodMeal.PortionUnit
+                </td>
+                <td>
+                    <a asp-page="./DeleteFoodFromMeal" asp-route-id="@foodMeal.Id"  class="btn btn-danger">Delete Food</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 </div>
-
+<br />
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index" class="btn btn-secondary">Back</a>
 </div>
 
 @section Scripts {

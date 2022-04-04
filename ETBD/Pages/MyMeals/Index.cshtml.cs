@@ -1,30 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using ETBD.Data.Entities;
-using ETBDApp.Data;
+﻿namespace ETBD.Pages.MyMeals;
 
-namespace ETBD.Pages.MyMeals
+[BindProperties]
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
+    public string UserId { get; set; }
+
+    public List<Meal> Meals { get; set; }
+    public List<MealFoods> MealFoodsList { get; set; }
+    public List<FoodMeal> FoodMeals { get; set; }
+
+    public IndexModel(ETBDApp.Data.ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        _context = context;
+        _userManager = userManager;
+    }
 
-        public IndexModel(ETBDApp.Data.ApplicationDbContext context)
+    public void OnGet()
+    {
+        UserId = _userManager.GetUserId(User);
+        Meals = _context.Meals.Where(x => x.UserId == UserId).ToList();
+
+        MealFoodsList = new List<MealFoods>();
+
+        foreach (var meal in Meals)
         {
-            _context = context;
-        }
+            List<FoodMeal> FoodMeals = _context.FoodMeals
+                .Where(x => x.MealId == meal.Id)
+                .Include(x => x.Food)
+                .ToList();
+            MealFoods MealFood = new()
+            {
+                MealId = meal.Id,
+                Foods = FoodMeals.Select(x => x.Food).ToList(),
+            };
 
-        public IList<Meal> Meal { get;set; }
-
-        public async Task OnGetAsync()
-        {
-            Meal = await _context.Meals
-                .Include(m => m.User).ToListAsync();
+            MealFoodsList.Add(MealFood);
         }
     }
 }

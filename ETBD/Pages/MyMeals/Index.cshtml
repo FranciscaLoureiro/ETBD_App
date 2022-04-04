@@ -1,48 +1,55 @@
 ﻿@page
 @model ETBD.Pages.MyMeals.IndexModel
-
 @{
-    ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
+<h1>Meals</h1>
+<a asp-page="./Create" class="btn btn-success">Add Meal</a>
+@if(@Model.Meals.Count > 0){
+    <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Meal[0].Name)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Meal[0].Date)
+                Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Meal[0].User)
+                Foods
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Meal) {
+
+@for(var i = 0; i < Model.Meals.Count(); i++) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Model.Meals[i].Name
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Date)
+                @Model.Meals[i].Date
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
+                <ul>
+                    @foreach (var food in Model.MealFoodsList[i].Foods)
+                    {
+                        <li>
+                            @food.Name
+                        </li>
+                    }
+                </ul>
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@Model.Meals[i].Id" class="btn btn-info">Edit</a> 
+                <a asp-page="./Details" asp-route-id="@Model.Meals[i].Id" class="btn btn-warning">Details</a> 
+                <a asp-page="./Delete" asp-route-id="@Model.Meals[i].Id" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+} else {
+    <h3>No meals yet</h3>
+}

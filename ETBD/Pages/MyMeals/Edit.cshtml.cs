@@ -1,79 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ETBD.Data.Entities;
-using ETBDApp.Data;
+﻿namespace ETBD.Pages.MyMeals;
 
-namespace ETBD.Pages.MyMeals
+[BindProperties]
+public class EditModel : PageModel
 {
-    public class EditModel : PageModel
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
+    public string UserId { get; set; }
+
+    public EditModel(ETBDApp.Data.ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        _context = context;
+        _userManager = userManager;
+    }
 
-        public EditModel(ETBDApp.Data.ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    public Meal Meal { get; set; }
+    public List<FoodMeal> FoodMeals { get; set; }
 
-        [BindProperty]
-        public Meal Meal { get; set; }
+    public void OnGet(int? id)
+    {
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        Meal = _context.Meals
+                .FirstOrDefault(m => m.Id == id);
 
-            Meal = await _context.Meals
-                .Include(m => m.User).FirstOrDefaultAsync(m => m.Id == id);
+        FoodMeals = _context.FoodMeals
+                .Where(m => m.MealId == id)
+                .Include(m => m.Food)
+                .ToList();
+    }
 
-            if (Meal == null)
-            {
-                return NotFound();
-            }
-           ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return Page();
-        }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        _context.Attach(Meal).State = EntityState.Modified;
 
-            _context.Attach(Meal).State = EntityState.Modified;
+        return RedirectToPage("./AddFoodToMeal", new {MealId =Meal.Id});
+    }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MealExists(Meal.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool MealExists(int id)
-        {
-            return _context.Meals.Any(e => e.Id == id);
-        }
+    private bool MealExists(int id)
+    {
+        return _context.Meals.Any(e => e.Id == id);
     }
 }

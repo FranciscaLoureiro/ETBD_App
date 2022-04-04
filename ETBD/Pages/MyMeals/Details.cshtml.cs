@@ -1,41 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using ETBD.Data.Entities;
-using ETBDApp.Data;
+﻿namespace ETBD.Pages.MyMeals;
 
-namespace ETBD.Pages.MyMeals
+[BindProperties]
+public class DetailsModel : PageModel
 {
-    public class DetailsModel : PageModel
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
+    public string UserId { get; set; }
+
+    public DetailsModel(ETBDApp.Data.ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        _context = context;
+        _userManager = userManager;
+    }
 
-        public DetailsModel(ETBDApp.Data.ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    public List<Meal> Meals { get; set; }
+    public List<FoodMeal> FoodMeals { get; set; }
+    public Meal Meal { get; set; }
 
-        public Meal Meal { get; set; }
-
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Meal = await _context.Meals
-                .Include(m => m.User).FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Meal == null)
-            {
-                return NotFound();
-            }
-            return Page();
-        }
+    public void OnGet(int? id)
+    {
+        
+        Meal = _context.Meals
+                .FirstOrDefault(m => m.Id == id);
+        
+        FoodMeals = _context.FoodMeals
+                .Where(m => m.MealId == id).Include(m => m.Food).ToList();          
     }
 }
