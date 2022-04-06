@@ -1,0 +1,56 @@
+﻿@page
+@model ETBD.Pages.MySuggestions.IndexModel
+@{
+}
+
+@if(Model.SuggestedFoods.Count() == 0)
+{
+    <h1>Congratulations, you took all actions today!</h1>
+    <hr />
+    <hr />
+}
+
+@if(Model.Foods.Count() > 0)
+{
+    <h2>Foods You Had Today</h2>
+    <span style="font-weight:bold">@Model.NumberOfMeals Meals</span>
+    <ul>
+        @foreach (var food in Model.Foods)
+        {
+            <li>@food.Name</li>
+        }
+    </ul>
+}
+
+@if(Model.ActionsTaken.Count() > 0)
+{
+    <h2>Actions Taken</h2>
+    <ul>
+        @foreach (var action in Model.ActionsTaken)
+        {
+            <li>@action.Name</li>
+        }
+    </ul>
+}
+
+@if(Model.ActionsToTake.Count() > 0)
+{
+    <h2>Actions Left to Take</h2>
+    <ul>
+    @foreach (var action in Model.ActionsToTake)
+    {
+        <li>@action.Name</li>
+    }
+</ul>
+}
+
+@if(Model.SuggestedFoods.Count() > 0)
+{
+    <h2>Suggested Foods to Complete All Actions</h2>
+    <ul>
+    @foreach (var food in Model.SuggestedFoods)
+    {
+        <li>@food.Name</li>
+    }
+</ul>
+}
