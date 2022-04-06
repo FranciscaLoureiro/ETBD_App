@@ -22,13 +22,17 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Food.Category.Name)
         </dd>
+        <dt class="col-sm-2">
+            <b>Action(s)</b>
+        </dt>
+        <dd class="col-sm-10">  
+            @foreach (var action in Model.ActionsList)
+            {
+                <li>@action.Name</li>
+            }
+        </dd>
     </dl>
-    <ul>
-        @foreach (var action in Model.ActionsList)
-        {
-            <li>@action.Name</li>
-        }
-    </ul>
+  
 </div>
  <hr />
 <div>

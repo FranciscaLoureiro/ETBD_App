@@ -1,0 +1,19 @@
+﻿@page
+@model ETBD.Pages.MyDashboard.IndexModel
+@{
+}
+
+<div class="row">
+    <div class="col-3">
+        <a asp-page="./users" class="btn btn-primary">All Users</a>
+    </div>
+    <div class="col-3">
+        <a asp-page="./top5Users" class="btn btn-secondary">Top 5 Active Users</a>
+    </div>
+    <div class="col-3">
+        <a asp-page="./top10Foods" class="btn btn-danger">Top 10 Foods</a>
+    </div>
+    <div class="col-3">
+        <a asp-page="./populateDatabase" class="btn btn-warning">Populate Database</a>
+    </div>
+</div>

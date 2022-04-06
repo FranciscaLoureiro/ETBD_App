@@ -21,9 +21,10 @@ public class IndexModel : PageModel
     }
     public void OnGet()
     {
+        var date = DateTime.Now.Date;
         UserId = _userManager.GetUserId(User);
         Meals = _context.Meals
-            .Where(m => m.Date == DateTime.Now.Date && UserId == m.UserId)
+            .Where(m => m.Date.Date >= date && m.Date.Date < date.AddDays(1) && UserId == m.UserId)
             .ToList();
 
         NumberOfMeals = Meals.Count();

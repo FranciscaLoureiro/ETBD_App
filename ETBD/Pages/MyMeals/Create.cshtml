@@ -5,9 +5,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Meal</h4>
+<h1>Add Meal</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -23,15 +21,16 @@
                 <input asp-for="Meal.Date" class="form-control" />
                 <span asp-validation-for="Meal.Date" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Add" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index" class="btn btn-secondary">Back</a>
 </div>
 
 @section Scripts {

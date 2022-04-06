@@ -1,0 +1,59 @@
+﻿@page
+@model ETBD.Pages.MyStatistics.IndexModel
+
+
+<h1>My Statistics</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Day
+            </th>
+            <th>
+                Foods
+            </th>
+            <th>
+                Actions Taken
+            </th>
+            <th>
+                Actions Not Taken
+            </th>
+            <th>
+                Success
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var day in Model.FrameworkDays)
+        {
+            <tr>
+                <td>@day.Date.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <ul>
+                        @foreach(var food in day.Foods)
+                        {
+                            <li>@food.Name</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach(var action in day.ActionsTaken)
+                        {
+                            <li>@action.Name</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach(var action in day.ActionsNotTaken)
+                        {
+                            <li>@action.Name</li>
+                        }
+                    </ul>
+                </td>
+                <td>@day.Success</td>
+            </tr>
+        }
+    </tbody>
+</table>

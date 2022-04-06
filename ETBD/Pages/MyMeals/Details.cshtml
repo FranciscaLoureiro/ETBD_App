@@ -22,20 +22,21 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Meal.Date)
         </dd>
-        <dd class="col-sm-10">
-            Foods
+        <dd class="col-sm-2">
+            <b>Foods</b>
         </dd>
-        <ul
-        @foreach (var foodmeal in Model.FoodMeals)
-        {
-            <li>
-                    @foodmeal.Food.Name
-            </li>
-        }
-        </ul>      
+        <dt class="col-sm-10">
+                @foreach (var foodmeal in Model.FoodMeals)
+                {
+                    <li>
+                        @foodmeal.Food.Name
+                    </li>
+                }
+        </dt>
+           
     </ul>
 </div>
-<br />
+<hr />
 <div>
     <a asp-page="./Index" class="btn btn-secondary">Back</a>
 </div>

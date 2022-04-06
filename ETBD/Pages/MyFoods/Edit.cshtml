@@ -22,8 +22,11 @@
                 <select asp-for="Food.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="Food.CategoryId" class="text-danger"></span>
             </div>
-           @if(Model.Actions != null && Model.Actions.Count() > 0)
-            {   
+            <br/>
+            <div class="form-group">
+                <h6>Action(s)</h6>
+                    @if(Model.Actions != null && Model.Actions.Count() > 0)
+                    {   
                     @foreach (var Action in Model.Actions)
                     {
                         <div class="form-check">
@@ -41,7 +44,8 @@
                             @Html.HiddenFor(y => @Action.Name)
                         </div>
                     }
-            }
+                    }
+            </div>
             <hr />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-success" />
