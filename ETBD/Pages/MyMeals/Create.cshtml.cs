@@ -1,35 +1,33 @@
-﻿namespace ETBD.Pages.MyMeals
+﻿namespace ETBD.Pages.MyMeals;
+
+[BindProperties]
+public class CreateModel : PageModel
 {
-    [BindProperties]
 
-    public class CreateModel : PageModel
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
+    public string UserId { get; set; }
+
+    public CreateModel(ETBDApp.Data.ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
+        _context = context;
+        _userManager = userManager;
+    }
 
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
-        public string UserId { get; set; }
+    public void OnGet()
+    {
+    }
 
-        public CreateModel(ETBDApp.Data.ApplicationDbContext context, UserManager<IdentityUser> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
+    public Meal Meal { get; set; }
 
-        public void OnGet()
-        {
-        }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        UserId = _userManager.GetUserId(User);
+        Meal.UserId = UserId;
 
-        public Meal Meal { get; set; }
+        _context.Meals.Add(Meal);
+        await _context.SaveChangesAsync();
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            UserId = _userManager.GetUserId(User);
-            Meal.UserId = UserId;
-
-            _context.Meals.Add(Meal);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./AddFoodToMeal", new { MealId = Meal.Id});
-        }
+        return RedirectToPage("./AddFoodToMeal", new { MealId = Meal.Id});
     }
 }

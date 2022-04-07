@@ -21,9 +21,6 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-
-        //if (ModelState.IsValid)
-        //{
         decimal weight = Convert.ToDecimal(Profile.Weight);
         decimal height = Convert.ToDecimal(Profile.Height);
         DateTime birthDate = Convert.ToDateTime(Profile.BirthDate);
@@ -39,10 +36,5 @@ public class CreateModel : PageModel
         _context.Profiles.Add(Profile);
         await _context.SaveChangesAsync();
         return RedirectToPage("Index");
-
-        //}
-        //return Page();
     }
-
-
 }

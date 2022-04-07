@@ -10,6 +10,5 @@ public class FrameworkDay
 
     public FrameworkDay()
     {
-
     }
 }

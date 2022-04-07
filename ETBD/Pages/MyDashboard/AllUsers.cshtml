@@ -1,4 +1,38 @@
 ﻿@page
-@model ETBD.Pages.MyDashboard.AllUsersModel
+@model ETBD.Pages.MyDashboard.UsersModel
 @{
 }
+<a asp-page="./Index" class="btn btn-danger">Back</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                User ID
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                Nº of Meals Added
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var userProfile in Model.UserProfiles)
+        {
+            <tr>
+                <td>@userProfile.UserId</td>
+                <td>@userProfile.Email</td>
+                <td>@userProfile.Profile.FirstName</td>
+                <td>@userProfile.Profile.LastName</td>
+                <td>@userProfile.MealsCount</td>
+            </tr>
+        }
+    </tbody>
+</table>

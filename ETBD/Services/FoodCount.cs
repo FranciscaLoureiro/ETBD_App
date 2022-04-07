@@ -6,7 +6,6 @@ public class FoodCount
     public Food Food { get; set; }
     
     public FoodCount()
-    {
-            
+    {     
     }
 }

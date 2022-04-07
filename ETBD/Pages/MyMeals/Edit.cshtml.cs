@@ -28,7 +28,6 @@ public class EditModel : PageModel
                 .ToList();
     }
 
-
     public async Task<IActionResult> OnPostAsync()
     {
         _context.Attach(Meal).State = EntityState.Modified;

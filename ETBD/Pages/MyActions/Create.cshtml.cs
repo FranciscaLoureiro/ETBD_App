@@ -1,34 +1,32 @@
-﻿namespace ETBD.Pages.MyActions
+﻿namespace ETBD.Pages.MyActions;
+
+public class CreateModel : PageModel
 {
-    public class CreateModel : PageModel
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+
+    public CreateModel(ETBDApp.Data.ApplicationDbContext context)
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public CreateModel(ETBDApp.Data.ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    public IActionResult OnGet()
+    {
+        return Page();
+    }
 
-        public IActionResult OnGet()
+    [BindProperty]
+    public Action Action { get; set; }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid)
         {
             return Page();
         }
 
-        [BindProperty]
-        public Action Action { get; set; }
+        _context.Actions.Add(Action);
+        await _context.SaveChangesAsync();
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Actions.Add(Action);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
-        }
+        return RedirectToPage("./Index");
     }
 }

@@ -1,30 +1,29 @@
-namespace ETBD.Pages.MyProfile
+namespace ETBD.Pages.MyProfile;
+
+[BindProperties]
+public class IndexModel : PageModel
 {
-    [BindProperties]
-    public class IndexModel : PageModel
+    private readonly UserManager<IdentityUser> _userManager;
+    private readonly ApplicationDbContext _context;
+    public string UserId { get; set; }
+    public Profile MyProfile { get; set; }
+
+    public IndexModel(UserManager<IdentityUser> userManager, ApplicationDbContext context)
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly ApplicationDbContext _context;
-        public string UserId { get; set; }
-        public Profile MyProfile { get; set; }
+        _userManager = userManager;
+        _context = context;
+    }
 
-        public IndexModel(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+    public IActionResult OnGet()
+    {
+        UserId = _userManager.GetUserId(User);
+        MyProfile = _context.Profiles.FirstOrDefault(m => m.UserId == UserId);
+
+        if (MyProfile == null)
         {
-            _userManager = userManager;
-            _context = context;
+            return RedirectToPage("Create");
         }
 
-        public IActionResult OnGet()
-        {
-            UserId = _userManager.GetUserId(User);
-            MyProfile = _context.Profiles.FirstOrDefault(m => m.UserId == UserId);
-
-            if (MyProfile == null)
-            {
-                return RedirectToPage("Create");
-            }
-
-            return Page();
-        }
+        return Page();
     }
 }

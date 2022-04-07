@@ -1,49 +1,48 @@
-﻿namespace ETBD.Pages.MyCategories
+﻿namespace ETBD.Pages.MyCategories;
+
+public class DeleteModel : PageModel
 {
-    public class DeleteModel : PageModel
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+
+    public DeleteModel(ETBDApp.Data.ApplicationDbContext context)
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public DeleteModel(ETBDApp.Data.ApplicationDbContext context)
+    [BindProperty]
+    public Category Category { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        [BindProperty]
-        public Category Category { get; set; }
+        Category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        if (Category == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
+        return Page();
+    }
 
-            Category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Category == null)
-            {
-                return NotFound();
-            }
-            return Page();
+    public async Task<IActionResult> OnPostAsync(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        Category = await _context.Categories.FindAsync(id);
+
+        if (Category != null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Category = await _context.Categories.FindAsync(id);
-
-            if (Category != null)
-            {
-                _context.Categories.Remove(Category);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToPage("./Index");
+            _context.Categories.Remove(Category);
+            await _context.SaveChangesAsync();
         }
+
+        return RedirectToPage("./Index");
     }
 }

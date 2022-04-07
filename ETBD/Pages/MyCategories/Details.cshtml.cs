@@ -1,30 +1,29 @@
-﻿namespace ETBD.Pages.MyCategories
+﻿namespace ETBD.Pages.MyCategories;
+
+public class DetailsModel : PageModel
 {
-    public class DetailsModel : PageModel
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+
+    public DetailsModel(ETBDApp.Data.ApplicationDbContext context)
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public DetailsModel(ETBDApp.Data.ApplicationDbContext context)
+    public Category Category { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        public Category Category { get; set; }
+        Category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        if (Category == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Category == null)
-            {
-                return NotFound();
-            }
-            return Page();
+            return NotFound();
         }
+        return Page();
     }
 }

@@ -17,12 +17,10 @@ public class CreateModel : PageModel
         ViewData["FoodId"] = new SelectList(_context.Foods, "Id", "Name");
         return Page();
     }
-
   
     [BindProperty]
     public BlackList BlackList { get; set; }
 
-    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)

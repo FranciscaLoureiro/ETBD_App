@@ -1,40 +1,39 @@
-﻿namespace ETBD.Pages.MyFoods
+﻿namespace ETBD.Pages.MyFoods;
+
+public class DetailsModel : PageModel
 {
-    public class DetailsModel : PageModel
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+
+    public DetailsModel(ETBDApp.Data.ApplicationDbContext context)
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public DetailsModel(ETBDApp.Data.ApplicationDbContext context)
+    public Food Food { get; set; }
+
+    public List<Action> ActionsList { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        public Food Food { get; set; }
+        Food = await _context.Foods
+            .Include(f => f.Category).FirstOrDefaultAsync(m => m.Id == id);
 
-        public List<Action> ActionsList { get; set; }
+        List<ActionFood> ActionFoodList = await _context.ActionFoods
+                .Where(x => x.FoodId == Food.Id)
+                .Include(x => x.Action)
+                .ToListAsync();
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        ActionsList = ActionFoodList.Select(x => x.Action).ToList();
+
+        if (Food == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Food = await _context.Foods
-                .Include(f => f.Category).FirstOrDefaultAsync(m => m.Id == id);
-
-            List<ActionFood> ActionFoodList = await _context.ActionFoods
-                    .Where(x => x.FoodId == Food.Id)
-                    .Include(x => x.Action)
-                    .ToListAsync();
-
-            ActionsList = ActionFoodList.Select(x => x.Action).ToList();
-
-            if (Food == null)
-            {
-                return NotFound();
-            }
-            return Page();
+            return NotFound();
         }
+        return Page();
     }
 }

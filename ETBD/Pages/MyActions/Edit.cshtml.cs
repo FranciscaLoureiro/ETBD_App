@@ -1,66 +1,63 @@
-﻿namespace ETBD.Pages.MyActions
-{
-    public class EditModel : PageModel
-    {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+﻿namespace ETBD.Pages.MyActions;
 
-        public EditModel(ETBDApp.Data.ApplicationDbContext context)
+public class EditModel : PageModel
+{
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+
+    public EditModel(ETBDApp.Data.ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    [BindProperty]
+    public Action Action { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        [BindProperty]
-        public Action Action { get; set; }
+        Action = await _context.Actions.FirstOrDefaultAsync(m => m.Id == id);
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        if (Action == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
+        return Page();
+    }
 
-            Action = await _context.Actions.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Action == null)
-            {
-                return NotFound();
-            }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid)
+        {
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        _context.Attach(Action).State = EntityState.Modified;
+
+        try
         {
-            if (!ModelState.IsValid)
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ActionExists(Action.Id))
             {
-                return Page();
+                return NotFound();
             }
-
-            _context.Attach(Action).State = EntityState.Modified;
-
-            try
+            else
             {
-                await _context.SaveChangesAsync();
+                throw;
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ActionExists(Action.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
         }
 
-        private bool ActionExists(int id)
-        {
-            return _context.Actions.Any(e => e.Id == id);
-        }
+        return RedirectToPage("./Index");
+    }
+
+    private bool ActionExists(int id)
+    {
+        return _context.Actions.Any(e => e.Id == id);
     }
 }

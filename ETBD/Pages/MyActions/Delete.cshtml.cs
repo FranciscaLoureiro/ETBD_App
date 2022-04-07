@@ -1,49 +1,48 @@
-﻿namespace ETBD.Pages.MyActions
+﻿namespace ETBD.Pages.MyActions;
+
+public class DeleteModel : PageModel
 {
-    public class DeleteModel : PageModel
+    private readonly ETBDApp.Data.ApplicationDbContext _context;
+
+    public DeleteModel(ETBDApp.Data.ApplicationDbContext context)
     {
-        private readonly ETBDApp.Data.ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public DeleteModel(ETBDApp.Data.ApplicationDbContext context)
+    [BindProperty]
+    public Action Action { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        [BindProperty]
-        public Action Action { get; set; }
+        Action = await _context.Actions.FirstOrDefaultAsync(m => m.Id == id);
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        if (Action == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
+        return Page();
+    }
 
-            Action = await _context.Actions.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Action == null)
-            {
-                return NotFound();
-            }
-            return Page();
+    public async Task<IActionResult> OnPostAsync(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        Action = await _context.Actions.FindAsync(id);
+
+        if (Action != null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Action = await _context.Actions.FindAsync(id);
-
-            if (Action != null)
-            {
-                _context.Actions.Remove(Action);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToPage("./Index");
+            _context.Actions.Remove(Action);
+            await _context.SaveChangesAsync();
         }
+
+        return RedirectToPage("./Index");
     }
 }

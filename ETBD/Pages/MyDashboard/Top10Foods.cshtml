@@ -2,3 +2,26 @@
 @model ETBD.Pages.MyDashboard.Top10FoodsModel
 @{
 }
+
+<a asp-page="./Index" class="btn btn-danger">Back</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Food
+            </th>
+            <th>
+                Times Added to Meals
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var foodCount in Model.FinalFoodCounts)
+        {
+            <tr>
+                <td>@foodCount.Food.Name</td>
+                <td>@foodCount.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
