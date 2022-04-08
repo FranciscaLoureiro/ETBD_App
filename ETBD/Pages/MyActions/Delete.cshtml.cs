@@ -1,5 +1,6 @@
 ﻿namespace ETBD.Pages.MyActions;
 
+[Authorize]
 public class DeleteModel : PageModel
 {
     private readonly ETBDApp.Data.ApplicationDbContext _context;

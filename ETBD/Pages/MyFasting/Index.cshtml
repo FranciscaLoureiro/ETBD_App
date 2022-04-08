@@ -1,0 +1,38 @@
+﻿@page
+@model ETBD.Pages.MyFasting.IndexModel
+@{
+}
+<h1>Fasting</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Day
+            </th>
+            <th>
+                Meals
+            </th>
+            <th>
+                Fasting Period
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var fastingDay in Model.FastingDays)
+        {
+            <tr>
+                <td>@fastingDay.Date.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <ul>
+                        @foreach(var meal in fastingDay.Meals)
+                        {
+                            <li>@meal.Name</li>
+                        }
+                    </ul>
+                </td>
+                <td>@fastingDay.FastingPeriod</td>
+            </tr>
+        }
+    </tbody>
+</table>

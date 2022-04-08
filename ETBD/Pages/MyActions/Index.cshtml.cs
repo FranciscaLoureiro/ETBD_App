@@ -1,5 +1,6 @@
 ﻿namespace ETBD.Pages.MyActions;
 
+[Authorize]
 public class IndexModel : PageModel
 {
     private readonly ETBDApp.Data.ApplicationDbContext _context;
@@ -11,8 +12,15 @@ public class IndexModel : PageModel
 
     public IList<Action> Action { get;set; }
 
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
+        if (!User.IsInRole("Admin"))
+        {
+            return RedirectToPage("/Index");
+        }
+
         Action = await _context.Actions.ToListAsync();
+
+        return Page();
     }
 }

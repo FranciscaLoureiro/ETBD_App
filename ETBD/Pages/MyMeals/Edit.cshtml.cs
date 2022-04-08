@@ -1,5 +1,6 @@
 ﻿namespace ETBD.Pages.MyMeals;
 
+[Authorize]
 [BindProperties]
 public class EditModel : PageModel
 {

@@ -1,5 +1,6 @@
 ﻿namespace ETBD.Pages.MyCategories;
 
+[Authorize]
 public class EditModel : PageModel
 {
     private readonly ETBDApp.Data.ApplicationDbContext _context;

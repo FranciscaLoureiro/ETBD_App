@@ -1,5 +1,6 @@
 ﻿namespace ETBD.Pages.MyBlackList;
 
+[Authorize]
 public class IndexModel : PageModel
 {
     private readonly ETBDApp.Data.ApplicationDbContext _context;

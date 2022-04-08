@@ -1,5 +1,6 @@
 ﻿namespace ETBD.Pages.MyFoods;
 
+[Authorize]
 public class IndexModel : PageModel
 {
     private readonly ETBDApp.Data.ApplicationDbContext _context;
@@ -13,8 +14,13 @@ public class IndexModel : PageModel
     [BindProperty]
     public List<FoodActions> FoodActionsList { get; set; }
 
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
+        if (!User.IsInRole("Admin"))
+        {
+            return RedirectToPage("/Index");
+        }
+
         Food = await _context.Foods
             .Include(f => f.Category)
             .ToListAsync();
@@ -37,5 +43,7 @@ public class IndexModel : PageModel
 
             FoodActionsList.Add(FoodActionsItem);
         }
+
+        return Page();
     }
 }

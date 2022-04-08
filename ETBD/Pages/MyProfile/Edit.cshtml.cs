@@ -1,5 +1,6 @@
 namespace ETBD.Pages.MyProfile;
 
+[Authorize]
 [BindProperties]
 public class EditModel : PageModel
 {

@@ -1,5 +1,6 @@
 namespace ETBD.Pages.MyDashboard;
 
+[Authorize]
 [BindProperties]
 public class Top10FoodsModel : PageModel
 {

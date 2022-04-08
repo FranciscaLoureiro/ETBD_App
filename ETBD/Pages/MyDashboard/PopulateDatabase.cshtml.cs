@@ -1,5 +1,6 @@
 namespace ETBD.Pages.MyDashboard;
 
+[Authorize]
 public class PopulateDatabaseModel : PageModel
 {
     private readonly ETBDApp.Data.ApplicationDbContext _context;

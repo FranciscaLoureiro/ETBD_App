@@ -1,5 +1,6 @@
 namespace ETBD.Pages.MyMeals;
 
+[Authorize]
 public class AddFoodToMealModel : PageModel
 {
     private readonly ETBDApp.Data.ApplicationDbContext _context;

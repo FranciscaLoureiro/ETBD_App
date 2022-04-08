@@ -1,5 +1,6 @@
 ﻿namespace ETBD.Pages.MyFoods;
 
+[Authorize]
 public class DetailsModel : PageModel
 {
     private readonly ETBDApp.Data.ApplicationDbContext _context;

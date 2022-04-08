@@ -1,5 +1,6 @@
 ﻿namespace ETBD.Pages.MyMeals;
 
+[Authorize]
 public class DeleteModel : PageModel
 {
     private readonly ETBDApp.Data.ApplicationDbContext _context;

@@ -1,5 +1,6 @@
 namespace ETBD.Pages.MySuggestions;
 
+[Authorize]
 [BindProperties]
 public class IndexModel : PageModel
 {
@@ -11,6 +12,8 @@ public class IndexModel : PageModel
     public List<Action> Actions { get; set; }
     public List<Food> Foods { get; set; }
     public List<Food> SuggestedFoods { get; set; }
+    public List<BlackList> BlackList { get; set; }
+    public List<int> BlackListFoodIds { get; set; }
     public string UserId { get; set; }
     public int NumberOfMeals { get; set; }
 
@@ -75,11 +78,22 @@ public class IndexModel : PageModel
 
         SuggestedFoods = new List<Food>();
 
+        BlackList = _context.BlackLists
+            .Where(b => b.UserId == UserId)
+            .ToList();
+
+        BlackListFoodIds = new List<int>();
+
+        foreach (var item in BlackList)
+        {
+            BlackListFoodIds.Add(item.FoodId);
+        }
+
         foreach (var action in ActionsToTake)
         {
             List<ActionFood> ActionFoods = _context.ActionFoods
-                .Where(f => f.ActionId == action.Id)
                 .Include(f => f.Food)
+                .Where(f => f.ActionId == action.Id && !BlackListFoodIds.Contains(f.Food.Id))
                 .ToList();
 
             if (ActionFoods.Count() > 0)
